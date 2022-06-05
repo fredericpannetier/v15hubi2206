@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hubi_wiz_updatestats_prod,hubi_wiz_updatestats_prod_group_user,model_wiz_updatestats_prod,base.group_user,1,1,1,1
+access_hubi_wiz_updatestats_partner,hubi_wiz_updatestats_partner_group_user,model_wiz_updatestats_partner,base.group_user,1,1,1,1

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+<record id="hubi_cat_stat_res_config_settings_hubi_form" model="ir.ui.view">
+    <field name="name">hubi_cat_stat Config Settings for Hubi</field>
+    <field name="model">res.config.settings</field>
+    <field name="priority" eval="16"/>
+    <field name="inherit_id" ref="hubi.res_config_settings_hubi_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//div[@name='hubi_settings_data']" position="before">   
+            <div class="row mt16"> 
+                                
+                <label string="Write Category Product" for="di_write_categ_product" class="col-lg-5 o_light_label"/>
+                <field name="di_write_categ_product" />
+                                    
+                <label string="Write Category Partner" for="di_write_categ_partner" class="col-lg-5 o_light_label"/>
+                <field name="di_write_categ_partner" />
+                                    
+            </div>
+    
+        </xpath>
+    </field>
+</record> 
+  
+     
+   
+ 
+</odoo>
