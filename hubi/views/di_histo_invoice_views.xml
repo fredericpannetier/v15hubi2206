@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+       <record id="di_histo_invoice_search" model="ir.ui.view">
+        <field name="name">di.histo.invoice.search</field>
+        <field name="model">di.histo.invoice</field>
+        <field name="arch" type="xml">
+            <search string="Search histo invoice">
+                <field name="type_invoice" />
+                <field name="num_invoice" />
+                <field name="date_invoice" />
+                <filter string="Invoice" name="invoice" domain="[('type_invoice','=','F')]"/>
+                <filter string="Credit Note" name="creditnote" domain="[('type_invoice','=','A')]"/>
+                <separator/>                
+            </search>
+        </field>
+    </record>
+   
+    <record id="di_histo_invoice_tree" model="ir.ui.view" >
+            <field name="name">di.histo.invoice.tree</field>
+            <field name="priority" eval="1"/>
+            <field name="model">di.histo.invoice</field>        
+            <field name="arch" type="xml">
+                <tree string="Archived Invoice" default_order = "num_invoice" import="true" create="true">
+                    <field name="type_invoice"/>
+                    <field name="num_invoice"/>
+                    <field name="date_invoice"/>
+                    <field name="partner_id"/>
+                    <field name="partner_ref"/>
+                    <field name="categ_id"/>
+                    <field name="caliber_id"/>
+                    <field name="packaging_id"/>
+                    <field name="quantity" sum="Total Quantity"/>
+                    <field name="weight"/>
+                    <field name="weight_total" sum="Total Weight"/>
+                    <field name="price_unit"/>
+                    <field name="price_unit_weight"/>
+                    <field name="amount_total" sum="Total Amount"/>
+                            
+                </tree>
+            </field>
+        </record>
+    
+    <record id="di_histo_invoice_form" model="ir.ui.view">
+        <field name="name">di.histo.invoice.form</field>
+        <field name="model">di.histo.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Archived Invoice">
+                <header>
+                </header>
+                <sheet>
+                    <div name="invoice_0001" class="oe_title">
+                        <H1>
+                            <field name="num_invoice" default_focus="1" placeholder="Number of the invoice"/>  
+                        </H1>
+                    </div> 
+                    
+                    <group name="invoice_001">
+                        <group name="invoice_002">
+                            <field name="type_invoice"/> 
+                            <field name="date_invoice"/>   
+                        </group>
+                        <group name="invoice_003">
+                            <field name="partner_id"/>
+                            <field name="partner_ref"/>
+                        </group>
+                        <group name="invoice_004">
+                            <field name="categ_id"/>
+                            <field name="caliber_id"/>
+                            <field name="packaging_id"/>
+                        </group>
+                        <group name="invoice_005">
+                            <field name="quantity"/>
+                            <field name="weight"/>
+                            <field name="weight_total"/>
+                            <field name="price_unit"/>
+                            <field name="price_unit_weight"/>
+                            <field name="amount_total"/>
+                        </group>
+
+                    </group>
+                </sheet>
+                               
+            </form>
+        </field>
+    </record>
+ 
+    <record id="di_histo_invoice_pivot_view" model="ir.ui.view">
+            <field name="name">di.histo.invoice.pivot.view</field>
+            <field name="model">di.histo.invoice</field>
+            <field name="arch" type="xml">
+                <pivot string="Archived Invoice" sample="1">
+                
+                    <field name="partner_id"  type="row"/>
+                    <field name="categ_id" type="row"/>
+                    <field name="caliber_id" type="row"/>
+                    <field name="date_invoice" interval="month"  type="row"/>
+                    
+                    <field name="packaging_id"  type="col"/>
+                    
+                    <field name="weight_total" type="measure"/>
+                    <field name="amount_total" type="measure"/>
+                    
+                </pivot>
+            </field>
+    </record>
+    
+   <record id="action_di_histo_invoice" model="ir.actions.act_window">
+        <field name="name">archived invoice</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">di.histo.invoice</field>
+        <field name="search_view_id" ref="di_histo_invoice_search"/>
+        <field name="context">{"search_default_invoice":1}</field>
+                 
+        <field name="view_mode">tree,form,pivot</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Aide
+            </p>
+            <p>
+                Listing of the archived invoices.
+            </p>
+        </field>
+    </record>    
+ 
+ 
+ 
+
+    
+
+ 
+ 
+ 
+</odoo>

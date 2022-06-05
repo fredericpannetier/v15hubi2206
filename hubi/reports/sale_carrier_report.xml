@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_carrier_delivery_slip">
+	   <t t-call="web.html_container">
+        <t t-call="web.basic_layout">
+            <div class="page">
+            
+        <t t-set="docs" t-value="docs" />
+        <t t-set="flag" t-value="0"/>
+        
+        <t t-foreach="docs.sorted(key= lambda sp: str(sp.carrier_id.name) and str(sp.carrier_id.name) or '' )" t-as="transp">
+            <!-- afin de gérer les ruptures et les sauts de pages on fait un 1er parcours de boucle à ce niveau -->
+            <t t-set="imp_entete" t-value="0"/>
+            <t t-if="flag == 0">
+                <!-- au 1er passage on charge les données nécessaires et on lance l'impression de l'entête -->
+                <t t-set="flag" t-value="1"/>
+                <t t-set="carrier_id" t-value="transp.carrier_id"/>
+                <t t-set="carrier_id_name" t-value="transp.carrier_id.name"/>
+                <t t-set="imp_entete" t-value="1"/>
+            </t>
+            <t t-else="">
+                <t t-if="carrier_id != transp.carrier_id">
+                    <!-- si rupture transporteur on charge les données nécessaires et on lance l'impression de l'entête -->
+                    <p style="page-break-before:always;"> </p>
+                    <t t-set="carrier_id" t-value="transp.carrier_id"/>
+                    <t t-set="carrier_id_name" t-value="transp.carrier_id.name"/>
+                    <t t-set="imp_entete" t-value="1"/>
+                </t>
+            </t>
+            <t t-set="total_qty" t-value="0" />
+            <t t-set="total_pallet" t-value="0.0" />
+            <t t-set="total_weight" t-value="0.0" />
+            
+            <!-- impression entête -->
+            <t t-if="imp_entete == 1">
+                
+                <!-- impression du titre du document -->
+                <h2 style="text-align: center">
+                    <span>Shipping Note du&amp;nbsp;</span>
+                    <span t-esc="datetime.datetime.now().strftime('%Y-%m-%d')" t-options="{'widget': 'date'}" class="m-0"/>
+                </h2>
+                <!-- impression du transporteur -->
+                <table class="table table-condensed table-bordered" width="100%">
+                    <thead>
+                        <tr>
+                            <th width="50%">
+                                <t t-if="carrier_id">
+                                    <h4 style="text-align: center" t-esc="carrier_id_name"/>
+                                </t>
+                            </th>
+                            <th width="50%">
+                                <t t-if="transp.company_id">
+                                    <h4 style="text-align: center" t-esc="transp.company_id.name"/>
+                                </t>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th width="50%">
+                                <t t-if="carrier_id">
+                                    <h4 style="text-align: center" t-esc="carrier_id.di_phone"/>
+                                </t>
+                            </th>
+                            <th width="50%">
+                                <t t-if="carrier_id">
+                                    <h4 style="text-align: center" t-esc="carrier_id.di_recipient"/>
+                                </t>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+                
+                <!-- impression des entêtes de colonnes -->
+                <table class="table table-condensed table-bordered" width="100%">
+                    <thead>
+                        <tr>
+                            
+                            <th>
+                                <h5 style="text-align: center">Num</h5>
+                            </th>
+                            <th>
+                                <h5 style="text-align: center">Customer</h5>
+                            </th>
+                            <th>
+                                <h5 style="text-align: center">Adress</h5>
+                            </th>
+                            <th>
+                                <h5 style="text-align: center">Packages</h5>
+                            </th>
+                            
+                            <th>
+                                <h5 style="text-align: center">Weight</h5>
+                            </th>
+                            <th>
+                                <h5 style="text-align: center">Pallets</h5>
+                            </th>
+                            <th>
+                                <h5 style="text-align: center">Comment</h5>
+                            </th>
+                        </tr>
+                    </thead>
+                    <!-- impression des lignes, on fait un 2eme parcours afin de rester entre les balises table -->
+                    <tbody>
+                        <t t-foreach="docs.sorted(key= lambda sp: str(sp.carrier_id.name) and str(sp.carrier_id.name) or '' )" t-as="sp">
+                            <t t-if="sp.carrier_id == carrier_id">
+                                <t t-set="flagbon" t-value="0"/>
+                                <tr>
+                                    <td> <span t-field="sp.name" /> </td>
+                                    <td ><span t-field="sp.partner_id.name" /> </td>
+                                    <t t-set="adresse_liv" t-value="sp.partner_id.street or ' ' + sp.partner_id.zip or ' '" /> 
+                                    <td> 
+                                        <span t-field="sp.partner_id.street" />
+                                        <span>&amp;nbsp;</span>
+                                        <span t-field="sp.partner_id.zip" />
+                                        <span>&amp;nbsp;</span>
+                                        <span t-field="sp.partner_id.city" />
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-field="sp.product_uom_qty" />
+                                        <t t-set="total_qty" t-value="total_qty + sp.product_uom_qty" /> 
+                                    </td>
+                            
+                                    <td class="text-right">
+                                        <span t-field="sp.weight" />
+                                        <t t-set="total_weight" t-value="total_weight + sp.weight" /> 
+                                    </td>
+
+                                    <td class="text-right"> 
+                                        <span t-field="sp.pallet_number" />
+                                        <t t-set="total_pallet" t-value="total_pallet + sp.pallet_number" />
+                                    </td>
+                                    <td></td>
+                               
+                                </tr>                                
+                               
+                            </t>
+                        </t>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            
+                            <td style="text-align: right"><b>TOTAL - </b><b t-esc="carrier_id_name"/></td>
+                            <td class="text-right"><b t-esc="round(total_qty,3)"/></td>
+                            <td class="text-right"><b t-esc="round(total_weight,3)"/></td>
+                            <td class="text-right"><b t-esc="total_pallet" t-options='{"widget": "float", "precision": 0}'/></td>
+                            
+                            <td></td>
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="3" style='border:none; line-height: 5px;'>
+                                I, the undersigned
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                                Packaging
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                                Signature Sender
+                            </td>                          
+
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="3" style='border:none; line-height: 5px;'>
+                                have counted _____ parcels.
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                            </td>                          
+
+                        </tr>
+                        <tr>
+                            <td colspan="3" style='border:none; line-height: 5px;'>
+                                Other reserves :
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                                Nb pal. placed : . . . . .
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                            </td>                          
+
+                        </tr>
+                        <tr>
+                            <td colspan="3" style='border:none; line-height: 5px;'>
+                                Signature :
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                                Nb pal. recovered : . . . . .
+                            </td>                          
+                            <td colspan="2" style='border:none; line-height: 5px;'>
+                            </td>                          
+
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </t>
+        </t>
+	 </div>           
+
+        </t>
+        </t>
+	
+	</template>
+	
+</odoo>

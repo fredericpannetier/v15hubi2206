@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_hubi_lowmargin" model="report.paperformat">
+        <field name="name">European A4 low margin</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">5</field>
+        <field name="margin_bottom">5</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">80</field>
+    </record>
+    
+    <record id="paperformat_hubi_A3_euro" model="report.paperformat">
+        <field name="name">European A3</field>
+        <field name="default" eval="True" />
+        <field name="format">A3</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="paperformat_hubi_A4_euro" model="report.paperformat">
+        <field name="name">European A4</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+    
+    <record id="report_qweb_paperformat" model="report.paperformat">
+        <field name="name">Account financial report qweb paperformat</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">297</field>
+        <field name="page_width">210</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">12</field>
+        <field name="margin_bottom">8</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">110</field>
+    </record>
+    
+    <record id="report_partner_list" model="ir.actions.report">
+        <field name="name">Customer List</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_partner_list_address</field>
+        <field name="report_file">hubi.report_partner_list_address</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="paperformat_hubi_lowmargin"/>
+        
+        <field name="binding_model_id" ref="model_res_partner"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="report_partner_sheet" model="ir.actions.report">
+        <field name="name">Customer Sheet</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_partner_sheet_address</field>
+        <field name="report_file">hubi.report_partner_sheet_address</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="paperformat_hubi_A4_euro"/>
+        
+        <field name="binding_model_id" ref="model_res_partner"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <record id="report_productprice_sheet" model="ir.actions.report">
+        <field name="name">Product Price Sheet</field>
+        <field name="model">product.pricelist</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_product_sheet_price</field>
+        <field name="report_file">hubi.report_product_sheet_price</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="paperformat_hubi_A3_euro"/>
+        
+        <field name="binding_model_id" ref="model_product_pricelist"/>
+        <field name="binding_type">report</field>
+    </record>
+  
+<!-->
+    <report 
+            id="action_report_saleorder_hubi"
+            string="Quotation / Order / HUBI"
+            model="sale.order" 
+            report_type="qweb-pdf"
+            file="hubi.report_sale_order_hubi" 
+            name="hubi.report_sale_order_hubi"
+            paperformat="paperformat_hubi_A4_euro" 
+            attachment_use="False"
+            print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+    />
+  -->
+      
+    <record id="action_report_no_validate_hubi" model="ir.actions.report">
+        <field name="name">Quotation / Order / No validate / HUBI</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_sale_order_no_validate_hubi</field>
+        <field name="report_file">hubi.report_sale_order_no_validate_hubi</field>
+        <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="paperformat_hubi_A4_euro"/>
+        
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <record id="action_report_pro_forma_invoice_hubi" model="ir.actions.report">
+        <field name="name">PRO-FORMA Invoice / HUBI</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_sale_order_pro_forma_hubi</field>
+        <field name="report_file">hubi.report_sale_order_pro_forma_hubi</field>
+        <field name="print_report_name">'PRO-FORMA - %s' % (object.name)</field>
+        <field name="paperformat_id" ref="paperformat_hubi_A4_euro"/>
+        
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+ 
+ 
+    <record id="report_invoice_summary" model="ir.actions.report">
+        <field name="name">Account Summary</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_account_invoice_summary</field>
+        <field name="report_file">hubi.report_account_invoice_summary</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="paperformat_hubi_A4_euro"/>
+        
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+ 
+  <!-->
+    <report 
+            id="account_invoices_hubi"
+            model="account.move"
+            string="Invoices Hubi"
+            report_type="qweb-pdf"
+            name="hubi.report_invoice_with_payments_hubi"
+            file="hubi.report_invoice_with_payments_hubi"
+            attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+            print_report_name="(object._get_report_base_filename())"
+        />
+ -->       
+        <!--attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"-->
+<!-->
+    <report
+            id="account_invoices_without_payment_hubi"
+            model="account.move"
+            string="Invoices Hubi without Payment"
+            report_type="qweb-pdf"
+            name="hubi.report_invoice_hubi"
+            file="hubi.report_invoice_hubi"
+            attachment="(object.state == 'posted') and ((object.name or 'INV').replace('/','_')+'.pdf')"
+            print_report_name="(object._get_name_invoice_report())"
+            
+        />
+ -->   
+        
+    <record id="report_sale_carrier" model="ir.actions.report">
+        <field name="name">Carrier Report</field>
+        <field name="model">sale.report.carrier</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hubi.report_carrier_delivery_slip</field>
+        <field name="report_file">hubi.report_carrier_delivery_slip</field>
+        <field name="attachment_use">False</field>
+        <field name="paperformat_id" ref="paperformat_hubi_lowmargin"/>
+        
+        <field name="binding_model_id" ref="model_sale_report_carrier"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+
+</odoo>

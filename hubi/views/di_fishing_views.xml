@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="di_fishing_type_tree" model="ir.ui.view">
+        <field name="name">di.fishing.type.tree</field>
+        <field name="model">di.fishing.type</field>        
+        <field name="arch" type="xml">
+            <tree string="Type of Fishing" import="true" create="true">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="di_fishing_type_form" model="ir.ui.view">
+        <field name="name">di.fishing.type.form</field>
+        <field name="model">di.fishing.type</field>
+        <field name="arch" type="xml">
+            <form string="Type of Fishing">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Name"/>
+                    </group>
+                </sheet>                     
+            </form>
+        </field>
+    </record>
+    
+    <record id="di_fishing_area_tree" model="ir.ui.view">
+        <field name="name">di.fishing.area.tree</field>
+        <field name="model">di.fishing.area</field>        
+        <field name="arch" type="xml">
+            <tree string="Area Fishing" import="true" create="true">
+                <field name="name"/>
+                <field name="sub_area_ids"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="di_fishing_area_form" model="ir.ui.view">
+        <field name="name">di.fishing.area.form</field>
+        <field name="model">di.fishing.area</field>
+        <field name="arch" type="xml">
+            <form string="Area Fishing">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Name"/>
+                        <field name="sub_area_ids" widget="one2many">
+                            <tree string="Sub Area">
+                                <field name="name"/>
+                            </tree>
+                            <form string="Sub Area">
+                                <field name="name"/>
+                            </form>
+                        </field>
+                    </group>
+                </sheet>                     
+            </form>
+        </field>
+    </record>
+    
+    <record id="di_fishing_sub_area_tree" model="ir.ui.view">
+        <field name="name">di.fishing.sub.area.tree</field>
+        <field name="model">di.fishing.sub.area</field>        
+        <field name="arch" type="xml">
+            <tree string="Sub Area Fishing" import="true" create="true">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="di_fishing_sub_area_form" model="ir.ui.view">
+        <field name="name">di.fishing.sub.area.form</field>
+        <field name="model">di.fishing.sub.area</field>
+        <field name="arch" type="xml">
+            <form string="Sub Area Fishing">
+                <header>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" placeholder="Name"/>
+                        <field name="area_id"/>
+                    </group>
+                </sheet>                     
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_di_fishing_type" model="ir.actions.act_window">
+        <field name="name">Type of Fishing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">di.fishing.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <record id="action_di_fishing_area" model="ir.actions.act_window">
+        <field name="name">Area Fishing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">di.fishing.area</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    
+    <record id="action_di_fishing_sub_area" model="ir.actions.act_window">
+        <field name="name">Sub Area Fishing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">di.fishing.sub.area</field>
+        <field name="context">{'default_type': 'area_id' , 'group_by': ['area_id']}</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
