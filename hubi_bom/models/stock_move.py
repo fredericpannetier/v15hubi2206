@@ -352,8 +352,8 @@ class StockMove(models.Model):
             return True
         return False
 
-    def _should_bypass_reservation(self):
-        res = super(StockMove, self)._should_bypass_reservation()
+    def _should_bypass_reservation(self, forced_location=False):
+        res = super(StockMove, self)._should_bypass_reservation(forced_location=forced_location)
         #return bool(res and not self.production_id)
         return bool(res)
 
