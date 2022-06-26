@@ -41,4 +41,16 @@ class DiDueResPartner(models.Model):
                         _logger.info("Total overdu : %s", total_overdue)
             record.di_total_due = total_due
             record.di_total_overdue = total_overdue
-            
+    def action_view_amount_due(self):
+        self.ensure_one()
+        action = self.env["ir.actions.actions"]._for_xml_id("account.action_move_out_invoice_type")
+        action['domain'] = [
+            ('move_type', 'in', ('out_invoice', 'out_refund')),
+            ('partner_id', 'child_of', self.id),
+        ]
+        action['context'] = {'default_move_type':'out_invoice', 'move_type':'out_invoice', 'journal_type': 'sale', 'search_default_open': 1}
+        return action
+
+
+    
+        
